@@ -1,4 +1,4 @@
-function Roll-Dice{
+function Invoke-Roll{
 <#
 .SYNOPSIS
     Outputs the total from one or multiple dice rolls.
@@ -10,8 +10,24 @@ function Roll-Dice{
     param(
         [string]$die = '1d20'
     )
+    
+    if($die.Contains('d') -eq "True"){
+        if($die.Length -gt 1){
+            [int]$multiplier, [int]$sides = $die.Split("d")
+        }else{
+            Write-Host -ForegroundColor Red "ERROR : INVALID SYNTAX : PLEASE USE [num](d/D)[num] SYNTAX"
+        }
+    }
+    elseif($die.Contains('D') -eq "True"){
+        if($die.Length -gt 1){
+            [int]$multiplier, [int]$sides = $die.Split("d")
+        }else{
+            Write-Host -ForegroundColor Red "ERROR : INVALID SYNTAX : PLEASE USE [num](d/D)[num] SYNTAX"
+        }
+    }else{
+        Write-Host -ForegroundColor Red "ERROR : INVALID SYNTAX : PLEASE USE [num](d/D)[num] SYNTAX"
+    }
 
-    [int]$multiplier, [int]$sides = $die.Split("d")
     $output = 0
     while($multiplier -gt 0){
         $result = (Get-Random -min 1 -max ($sides + 1))
@@ -130,7 +146,7 @@ function Get-Profit{
     Write-Host "Calculating Profits for $Businesses Business(es) for $totalDays days: `n
 --------------------------------------------------------------------- `n"
     While($daysRemaining -gt 0){
-        $roll = Roll-Dice 1d100
+        $roll = Invoke-Roll 1d100
         
         if ($roll -lt 21){
             $cost = $maint * 1.5
@@ -163,14 +179,14 @@ function Get-Profit{
             }
 
         }elseif($roll -gt 60 -and $roll -lt 81){
-            $gold = (Roll-Dice '1d6') * 5
+            $gold = (Invoke-Roll '1d6') * 5
             if ($full){
                 Write-Host "rolling 1d100 : $roll"
                 Write-Host "Business earns a profit of $gold gold `n"
             }
 
         }elseif($roll -gt 80 -and $roll -lt 91){
-            $gold = (Roll-Dice '2d8') * 5
+            $gold = (Invoke-Roll '2d8') * 5
             $total += $gold
             if ($full){
                 Write-Host "rolling 1d100 : $roll"
@@ -178,7 +194,7 @@ function Get-Profit{
             }
         
         }elseif($roll -gt 90 -and $roll -lt 101){
-            $gold = (Roll-Dice '3d10') * 5
+            $gold = (Invoke-Roll '3d10') * 5
             $total += $gold
             if ($full){
                 Write-Host "rolling 1d100 : $roll"
